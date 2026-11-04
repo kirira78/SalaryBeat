@@ -1,0 +1,17 @@
+dist/
+release/
+marketing/
+preview-*.png
+ui-test-profile/
+**/ui-test-profile/
+**/settings.xml*
+**/rates/
+*.exe
+*.pdb
+*.tmp
+*.bak
+.env
+.env.*
+.vs/
+bin/
+obj/

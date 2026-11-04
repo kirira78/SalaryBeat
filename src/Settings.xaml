@@ -1,0 +1,41 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="薪光 · 薪资设置" Width="450" Height="660" ResizeMode="NoResize" WindowStartupLocation="CenterOwner" Background="#F5F5EF" FontFamily="Microsoft YaHei UI" Foreground="#203C30">
+ <Window.Resources>
+  <Style TargetType="TextBox"><Setter Property="FontSize" Value="15"/><Setter Property="Padding" Value="11,8"/><Setter Property="Background" Value="White"/><Setter Property="BorderBrush" Value="#CBD5C8"/><Setter Property="VerticalContentAlignment" Value="Center"/></Style>
+  <Style TargetType="TextBlock"><Setter Property="FontSize" Value="12"/></Style>
+  <Style TargetType="ComboBox"><Setter Property="FontSize" Value="13"/><Setter Property="Padding" Value="8"/></Style>
+  <Style TargetType="Button"><Setter Property="Cursor" Value="Hand"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button"><Border x:Name="B" Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="B" Property="Opacity" Value="0.8"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+ </Window.Resources>
+ <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="28,23,28,22">
+  <TextBlock Text="让努力，有迹可循。" FontSize="24" FontWeight="SemiBold"/><TextBlock Text="设置一次，往后的每一秒都为你记录。" Foreground="#7A897B" Margin="0,7,0,22"/>
+  <TextBlock Text="工资币种" Margin="0,0,0,7"/><ComboBox x:Name="Currency" AutomationProperties.Name="工资币种"/>
+  <CheckBox x:Name="ConvertToCny" Content="自动折算成人民币显示" Margin="0,12,0,8"/>
+  <TextBlock Text="工资按所选原币输入。Frankfurter 日更参考汇率，每小时检查；只请求币种，不上传工资。无汇率时保留原币显示。港币并不代表香港假期，请另行设置日历。" TextWrapping="Wrap" Foreground="#6C7D65" FontSize="11" Margin="0,0,0,18"/>
+  <TextBlock Text="计薪方式" Margin="0,0,0,7"/><ComboBox x:Name="PayMode" AutomationProperties.Name="计薪方式"><ComboBoxItem Content="固定月薪"/><ComboBoxItem Content="按实际出勤 · 日薪"/></ComboBox>
+  <TextBlock x:Name="ModeHelp" TextWrapping="Wrap" Foreground="#6C7D65" FontSize="11" Margin="0,8,0,12"/>
+  <TextBlock Text="日薪（所选币种，仅按出勤模式使用）" Margin="0,0,0,7"/><TextBox x:Name="DailyRate" AutomationProperties.Name="日薪" Margin="0,0,0,12"/>
+  <TextBlock Text="月薪（所选币种）" Margin="0,0,0,7"/><TextBox x:Name="Salary" AutomationProperties.Name="月薪"/>
+  <Grid Margin="0,17,0,0"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="14"/><ColumnDefinition/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="休息制度" Margin="0,0,0,7"/><ComboBox x:Name="Schedule" AutomationProperties.Name="休息制度"><ComboBoxItem Content="双休 · 周六 / 周日"/><ComboBoxItem Content="单休 · 自选休息日"/><ComboBoxItem Content="大小周 · 隔周双休"/></ComboBox></StackPanel><StackPanel Grid.Column="2"><TextBlock Text="单休休息日" Margin="0,0,0,7"/><ComboBox x:Name="RestDay" AutomationProperties.Name="单休休息日"><ComboBoxItem Content="周日"/><ComboBoxItem Content="周一"/><ComboBoxItem Content="周二"/><ComboBoxItem Content="周三"/><ComboBoxItem Content="周四"/><ComboBoxItem Content="周五"/><ComboBoxItem Content="周六"/></ComboBox></StackPanel></Grid>
+  <StackPanel x:Name="AlternatePanel" Visibility="Collapsed" Margin="0,15,0,0">
+   <TextBlock Text="选一个双休周内的日期" Margin="0,0,0,7"/>
+   <DatePicker x:Name="AlternateAnchor" FirstDayOfWeek="Monday" SelectedDateFormat="Short" Padding="6" AutomationProperties.Name="大小周双休参考日期"/>
+   <TextBlock x:Name="AlternateInfo" TextWrapping="Wrap" Foreground="#6C7D65" FontSize="11" Margin="0,8,0,0"/>
+   <TextBlock Text="节假日补班与手动设置仍优先，不会打乱隔周交替。" TextWrapping="Wrap" Foreground="#6C7D65" FontSize="11" Margin="0,4,0,0"/>
+  </StackPanel>
+  <Grid Margin="0,17,0,0"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="14"/><ColumnDefinition/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="上班时间" Margin="0,0,0,7"/><TextBox x:Name="Start" AutomationProperties.Name="上班时间"/></StackPanel><StackPanel Grid.Column="2"><TextBlock Text="下班时间" Margin="0,0,0,7"/><TextBox x:Name="End" AutomationProperties.Name="下班时间"/></StackPanel></Grid>
+  <CheckBox x:Name="ExcludeBreak" Content="午休不计薪" Margin="0,19,0,10" FontSize="13" Foreground="#203C30"/>
+  <Grid x:Name="BreakFields"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="14"/><ColumnDefinition/></Grid.ColumnDefinitions><StackPanel><TextBlock Text="午休开始" Margin="0,0,0,7"/><TextBox x:Name="BreakStart" AutomationProperties.Name="午休开始"/></StackPanel><StackPanel Grid.Column="2"><TextBlock Text="午休结束" Margin="0,0,0,7"/><TextBox x:Name="BreakEnd" AutomationProperties.Name="午休结束"/></StackPanel></Grid>
+  <CheckBox x:Name="ChinaCalendar" Content="使用中国大陆 2026 年节假日与调休" Margin="0,20,0,10"/>
+  <Button x:Name="CalendarButton" Content="编辑出勤 / 带薪假日历" Background="#E0E7D9" Padding="12"/>
+  <TextBlock Text="显示偏好" FontWeight="SemiBold" FontSize="16" Margin="0,22,0,12"/>
+  <CheckBox x:Name="MaskAmounts" Content="隐藏所有金额（也可按 Ctrl+H）" Margin="0,0,0,12"/>
+  <CheckBox x:Name="DiscreetMode" Content="低调进度条：只显示时钟与进度" Margin="0,0,0,12"/>
+  <Grid Margin="0,0,0,8"><TextBlock Text="窗口不透明度 · 拖动即时预览"/><TextBlock x:Name="OpacityValue" HorizontalAlignment="Right" Foreground="#254B37" FontWeight="Bold"/></Grid>
+  <Slider x:Name="OpacitySlider" Minimum="35" Maximum="100" Height="32" IsSnapToTickEnabled="False" IsMoveToPointEnabled="True" SmallChange="1" LargeChange="5" Cursor="Hand" AutomationProperties.Name="窗口不透明度">
+   <Slider.Template><ControlTemplate TargetType="Slider"><Grid Background="Transparent" Margin="9,0"><Border Background="#CDD7C6" Height="6" CornerRadius="3"/><Track x:Name="PART_Track" Minimum="{TemplateBinding Minimum}" Maximum="{TemplateBinding Maximum}" Value="{TemplateBinding Value}"><Track.DecreaseRepeatButton><RepeatButton Command="Slider.DecreaseLarge" Focusable="False"><RepeatButton.Template><ControlTemplate><Border Background="#52735D" Height="6" CornerRadius="3"/></ControlTemplate></RepeatButton.Template></RepeatButton></Track.DecreaseRepeatButton><Track.Thumb><Thumb Width="20" Height="24"><Thumb.Template><ControlTemplate><Border Background="#254B37" BorderBrush="#F5F5EF" BorderThickness="3" CornerRadius="10"/></ControlTemplate></Thumb.Template></Thumb></Track.Thumb><Track.IncreaseRepeatButton><RepeatButton Command="Slider.IncreaseLarge" Focusable="False"><RepeatButton.Template><ControlTemplate><Border Background="Transparent"/></ControlTemplate></RepeatButton.Template></RepeatButton></Track.IncreaseRepeatButton></Track></Grid></ControlTemplate></Slider.Template>
+  </Slider>
+  <TextBlock Text="Ctrl+Alt+D 全局切换低调模式；窗口内也可按 Ctrl+D。Esc 收起到托盘。拖动上方滑块即时预览，保存后记住，关闭设置则还原。" TextWrapping="Wrap" Foreground="#6C7D65" FontSize="11" Margin="0,10,0,0"/>
+  <Border Background="#E8EDDF" CornerRadius="10" Padding="12" Margin="0,18,0,0"><TextBlock Text="固定月薪按计薪日均摊；日薪模式按日历出勤与带薪假计薪。带薪假按设定时段累积，调休休息日不重复计薪。不含加班倍率、税费及跨日班次。数据仅保存在本机。" TextWrapping="Wrap" Foreground="#6C7D65" FontSize="11" LineHeight="19"/></Border>
+  <TextBlock x:Name="Error" Foreground="#AD4638" TextWrapping="Wrap" Margin="0,9,0,9" MinHeight="18" FontSize="11"/>
+  <Button x:Name="Save" Content="保存，开始积累" Background="#254B37" Foreground="White" Padding="14" FontSize="14" IsDefault="True"/>
+ </StackPanel></ScrollViewer>
+</Window>
