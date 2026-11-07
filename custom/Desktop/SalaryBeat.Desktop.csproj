@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework><UseWPF>true</UseWPF><UseWindowsForms>true</UseWindowsForms><EnableDefaultPageItems>false</EnableDefaultPageItems><EnableWindowsTargeting>true</EnableWindowsTargeting><ImplicitUsings>disable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>SalaryBeat</AssemblyName><Product>SalaryBeat 薪跳</Product><Title>SalaryBeat 薪跳</Title><Version>1.1.1</Version><EnableCompressionInSingleFile>true</EnableCompressionInSingleFile><ApplicationIcon>../assets/SalaryBeat.ico</ApplicationIcon></PropertyGroup>
+<ItemGroup><ProjectReference Include="../Core/SalaryBeat.Core.csproj"/><None Include="../data/*" Link="data/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/><EmbeddedResource Include="Theme.xaml" LogicalName="Theme.xaml"/><EmbeddedResource Include="../assets/SalaryBeat.ico" LogicalName="App.ico"/></ItemGroup>
+</Project>

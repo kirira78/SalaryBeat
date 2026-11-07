@@ -1,94 +1,93 @@
-# 薪光 SalaryGlow
+# SalaryBeat · 薪跳
 
-让每一份努力都看得见。一个原生 Windows 桌面工资进度小窗，支持单休、双休、大小周、带薪假期、多币种折算和低调模式。
+让工作中的每一秒收入都看得见。基于 [SalaryGlow](https://github.com/BarryD-777/SalaryGlow) 二次开发的 Windows 桌面收入看板。
 
-A lightweight Windows salary progress widget built with C# and WPF. Supports alternating weekends, paid leave, currency conversion and a discreet clock view.
+**当前版本：v1.1.1 测试版 · Windows 10 / 11 x64 · 本地运行 · 无需服务器**
 
-[下载 Windows 版本](https://github.com/BarryD-777/SalaryGlow/releases/latest) · [报告问题](https://github.com/BarryD-777/SalaryGlow/issues) · [MIT License](LICENSE)
+## 主要功能
 
-<p align="center"><img src="docs/images/overview.png" width="360" alt="薪光桌面工资时钟，展示金额为示例" /> <img src="docs/images/discreet.png" width="360" alt="低调进度条与快捷键" /></p>
+- **今日已赚 / 本月累计**同时展示，点击可切换主次；收入保留两位小数，辅助显示六位本月秒薪。
+- 里程表式数字滚动，按工作进度计算；关机、休眠或退出后再次打开会补算。
+- **640×400（16:10）**桌面卡片，默认右下角置顶；设置是同窗口背面，可原地翻面。
+- 透明迷你悬浮窗：白色加粗黑体、深色轮廓与薄荷绿光晕；托盘菜单可锁定 / 解锁鼠标穿透。
+- 按星期分别配置多个工作时段，间隔视为午休或 break；午夜按自然日拆分。
+- 双休、固定周六上班的单休、带基准周的大小周，以及逐日额外工作 / 调休覆盖。
+- **内嵌 holiday-cn 2026–2027 年日历**，无需用户下载；另保留 2025 年历史数据。缺少其他年份时提供对应年度页面链接，可导入 JSON。
+- 月份快照、未来月份预录、新月份继承与持续确认提醒；本地备份、系统明暗主题及开机自启。
 
-## 开始使用
+## 下载安装
 
-从 Releases 下载 `SalaryGlow-v5.exe`（或解压完整 ZIP），双击即可运行，无需安装。Windows 10 / 11，需 .NET Framework 4.8。旧版设置自动沿用；请不要同时运行两个版本，以免互相覆盖设置。
+在本仓库的 [Releases](https://github.com/kirira78/SalaryBeat/releases) 下载 `SalaryBeat-1.1.1-win-x64.zip`，解压后运行 `SalaryBeat.exe`，自包含版本不需要额外安装 .NET。
 
-## 计薪模式
+升级前先从托盘退出旧版。程序沿用 `%LOCALAPPDATA%\SalaryBeat\` 中的设置；首次从旧 SalaryGlow 测试版升级时，会导入旧 `SalaryGlowLeo` 设置，保留原文件，不覆盖已存在的新配置。
 
-- **固定月薪**：月薪 ÷ 当月计薪日数，计薪日包含出勤日与带薪假日。整月总额固定；修改日历会重新分配每天金额，不自动扣除请假工资。整月没有计薪日时显示零，避免无效除法。
-- **按实际出勤（日薪）**：自行输入日薪，按日历的出勤日与带薪假日累计，月总额随计薪天数变化，不封顶于月薪。没有自动打卡或出勤检测，请在日历中核对实际出勤；缺勤可标为“休息 / 不计薪”。
-- 两种模式均在设定的计薪时段按时间累积；带薪休假无需上班也累积。普通休息日不累积。排除午休时暂停增长。
-- 日历优先级：个人逐日设置 > 已启用的官方日历 > 单休 / 双休 / 大小周排班。单休可以指定星期几休息。
+源码目录与运行包目录并非同一套启动入口：**运行 SalaryBeat，不是根目录保留的原版 SalaryGlow 程序。**
 
-## 节假日与调休
+## 计算规则
 
-内置中国大陆 **2026 年**官方放假和调休补班安排。法定假日标记为带薪休假，其余连休和调休日标记为普通休息，避免把整个长假重复计薪。公司不跟随官方安排时可关闭此选项，或在“编辑出勤 / 带薪假日历”中逐日覆盖。其他年份回退到每周排班，并显示未内置提醒，需要手动配置，不会套用 2026 年日期。
+```text
+本月秒薪 = 本月应得收入 ÷ 本月全部计薪时段总秒数
+今日已赚 = 本月应得收入 × 今日已过计薪秒数 ÷ 本月计薪总秒数
+本月累计 = 本月应得收入 × 本月已过计薪秒数 ÷ 本月计薪总秒数
+```
 
-日历修改后回到设置页点“保存”才生效。可恢复某个日期的默认安排。更新设置会重新计算当月，尚不保存历史工资版本。
+- 收入按**所属月份**录入，实际到账日不会重置进度。
+- 排班优先级：手动日期覆盖 > 国家放假 / 调休补班 > 每周单双休规则；同一天不重复计算。
+- 所有计薪时段使用同一秒薪；午休、下班与休息日暂停。
+- 修改所选月份会整月重新分摊，历史月份和已预录月份保留各自设置。
+- 新月份未录入时继承此前最近月份，不复制具体日期覆盖，主界面提醒直到确认。
+- 内部计算使用 decimal，显示四舍五入不影响内部精度。它是收入进度估算，不是银行到账或税务结算。
 
-来源：[2026 年放假通知](https://www.gov.cn/zhengce/content/202511/content_7047090.htm)、[全国年节及纪念日放假办法](https://app.www.gov.cn/govdata/gov/202411/12/521605/article.html)。
+## 本地开发与构建
 
-## 低调显示
-
-- 顶部 ◎ 或窗口内 Ctrl+H：隐藏 / 显示今日、月累计、时薪及目标金额。
-- 主窗口「低调模式」按钮 / 全局 Ctrl+Alt+D / 设置 → 低调进度条：约 244 × 92 像素的灰色小条，只显示时钟和进度，无工资文字、金额或货币符号，也不显示在任务栏。
-- 设置 → 不透明度：35%–100%。
-- 低调条右侧 ↗ 返回完整面板；托盘菜单也可切换回低调条。
-- Esc 或主窗口 −：安静收起到托盘，不弹通知。Esc 和 Ctrl+H 在窗口获得焦点时有效，Ctrl+Alt+D 为全局快捷键。
-- 拖动顶部移动窗口；◇ 切换置顶；迷你模式保留金额但缩小面板。
-- 隐藏金额只作用于展示面板，主动打开薪资设置仍能看到可编辑金额。
-
-## 本地存储与估算范围
-
-工资计算在本机进行；选择外币且开启折算时会联网查询汇率（只发送币种）。设置存放在 `%LOCALAPPDATA%\SalaryGlow\settings.xml`，保留上一份 `.bak`。关闭应用后再打开会按本机当前时间重算。数据仅存本机。
-
-这是收入进度估算，不是工资结算：不含税费、加班倍率、跨日班次、入离职折算或固定月薪缺勤扣款。日薪与公司计薪口径请自行核对。
-
-## 构建
-
-在 Windows 上克隆仓库后运行：
+需要 [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)。在 Windows PowerShell 中：
 
 ```powershell
-git clone https://github.com/BarryD-777/SalaryGlow.git
-cd SalaryGlow
+git clone https://github.com/kirira78/SalaryBeat.git
+cd SalaryBeat\custom
+dotnet run --project Tests/SalaryBeat.Tests.csproj -c Release
 powershell -ExecutionPolicy Bypass -File build.ps1
 ```
 
-需要 Windows 自带的 .NET Framework 4.x 编译器及 WPF 组件；无需安装 .NET SDK，也无需下载第三方包。构建脚本会执行回归测试，失败时停止。通常使用 Windows 10 / 11 的 .NET Framework 4.8 环境。
+输出：`custom/dist/1.1.1/win-x64/SalaryBeat.exe`。核心测试可在 macOS / Linux 运行；WPF 原生界面需要 Windows。
 
-C# / WPF，无第三方运行依赖。运行 `powershell -ExecutionPolicy Bypass -File build.ps1`，生成 `dist/SalaryGlow-v5.exe` 并运行 110 项计算及设置兼容检查。源码位于 `src`。
+可选 Windows 图形回归入口（使用示例数据，不读写正式工资或启动项）：
 
-## 多币种与自动折算
+```powershell
+.\SalaryBeat.exe --render-preview .\ui-preview
+.\SalaryBeat.exe --ui-regression .\ui-regression
+```
 
-支持 CNY、HKD、USD、EUR、JPY、GBP、AUD、CAD、SGD、CHF、NZD、MOP、TWD、KRW。设置中选择工资币种，以该币种输入月薪或日薪，并勾选“自动折算成人民币显示”。今日金额、时薪、日目标和本月累计统一折算。关闭换算则显示原币与币种代码。
+## 当前验证状态
 
-来源为 [Frankfurter v2](https://frankfurter.dev/) 的日更参考汇率，无需密钥。启动或切换币种时查询，此后每小时检查一次；↻ 手动检查（最短间隔 15 秒）。请求有 12 秒超时，不阻塞界面。只发送币种，金额始终在本机换算。
+- 13 组、81 项核心断言通过。
+- Windows x64 交叉构建和自包含发布成功。
+- **最新界面修复尚未完成 Windows 实机验收**；构建成功不等于动画、输入框、穿透、置顶和自启都已验证。
+- 详细结果见 [1.1.1 验证记录](custom/docs/VALIDATION-1.1.1.md)。
 
-界面分别显示数据日期与最近成功检查时间。断网或服务失败时使用对应币种缓存，并标注失败；无缓存显示原币，绝不默认按 1:1 换算。人民币无需请求。缓存位于设置目录下的 `rates`，不会拿港币缓存用于美元。隐藏金额模式仍可显示公开汇率，不显示工资金额。
+## 源码结构
 
-本月累计是以最新参考汇率折算的当前估值，不是按每日历史汇率加总；汇率变化时人民币估值可能下降，原币工资进度不受影响。银行实际兑换价、手续费可能不同。该版本不提供秒级实时行情，也不会自动更新香港假期；币种与地区排班是独立设置。
+| 路径 | 内容 |
+|---|---|
+| `custom/Core/` | 日历、计薪、月份快照、本地存储、金额格式化 |
+| `custom/Desktop/` | WPF 看板、翻面设置、滚动数字、托盘与原生集成 |
+| `custom/Tests/` | 可跨平台执行的核心回归 |
+| `custom/data/` | 内嵌年度日历与 holiday-cn 许可 |
+| `custom/assets/` | 薪跳图标与生成脚本 |
+| `custom/build.ps1` / `custom/package.py` | 构建与本地打包 |
+| `src/` / 根目录 `build.ps1` | 保留的上游 SalaryGlow 原始实现，不是定制版入口 |
 
-## 便捷操作（v4.1）
+## 文档
 
-- 主窗口底部新增“低调模式”按钮，低调条右侧箭头直接退出并保存模式偏好。
-- 全局 **Ctrl+Alt+D** 切换主窗口 / 低调条，切换到别的软件后也可使用。若被别的软件占用，按钮提示会说明，仍可用按钮或窗口内 **Ctrl+D**。设置窗口打开期间快捷键只将设置置前，避免中断编辑。
-- 透明度支持拖动滑块及按住轨道连续拖动，35%–100%，百分比随动，主窗口与低调条即时预览，设置表单保持清晰。点击保存才持久化，直接关闭设置还原。
-- 滑块获得焦点后支持左右方向键微调。
-- 开发验证使用 `--ui-test` 会使用程序目录内的独立测试配置，不修改正常用户设置。
+- [完整操作与升级说明](custom/README.md)
+- [需求规格](custom/docs/REQUIREMENTS.md)
+- [版本变更](custom/docs/CHANGELOG.md)
+- [1.1.1 实际验证记录](custom/docs/VALIDATION-1.1.1.md)
+- [第三方来源与许可](custom/THIRD_PARTY_NOTICES.md)
+- [上游项目原说明](docs/UPSTREAM_README.md)
 
-## 大小周（v5）
+## 隐私与许可
 
-设置 → 休息制度 → 大小周 · 隔周双休，选择你确定为双休周内的任意日期。该周周六、周日休息，前后一周仅周日休息。以周一为一周起点，按连续周数交替，跨月、跨年不重置，也不因某周遇到节假日而改变后续节奏。
+工资与排班只保存在本机，不上传 GitHub。仓库不包含个人设置、密钥、缓存或构建中间文件。
 
-自定义逐日安排优先，其次是启用的官方节假日/补班，最后才使用大小周基础排班。固定月薪和按日薪模式均使用此日历计算。主窗口显示本周的基础单休/双休类型。
-
-## 项目结构与参与贡献
-
-- `src/App.cs`：应用界面逻辑、配置、计薪与回归测试。
-- `src/Calendar.cs`：每周排班、大小周、节假日和逐日覆盖。
-- `src/ExchangeRates.cs`：汇率请求、校验与缓存。
-- `src/*.xaml`：主窗口、设置页、低调条。
-- `build.ps1`：构建和运行测试。
-
-欢迎通过 Issue 提交问题和功能建议。提交代码前请阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。当前版本提供收入估算，尚未覆盖所有公司的薪酬规则。历史版本变更见 [CHANGELOG.md](CHANGELOG.md)。
-
-源码和自制界面素材按 MIT 许可证开放；第三方汇率服务与官方假期数据遵循各自来源的条款。工资和排班配置不随源码发布。
+本项目基于 MIT 许可的 SalaryGlow，保留其版权与 [LICENSE](LICENSE)；holiday-cn 采用 MIT，许可保存在 [data/LICENSE.holiday-cn](custom/data/LICENSE.holiday-cn)。PayDance 和指定 Figma 仅作视觉 / 交互参考，未复制其代码、插画或素材。

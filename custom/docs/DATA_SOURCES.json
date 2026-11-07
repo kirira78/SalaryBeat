@@ -1,0 +1,17 @@
+{
+  "2025.json": {
+    "year": 2025,
+    "entries": 33,
+    "sha256": "33e3023d3af27e158d31196a3cc5096aa089ecd5cd33280fb0b92cd9c9d180c9"
+  },
+  "2026.json": {
+    "year": 2026,
+    "entries": 39,
+    "sha256": "0dcfd8004351e132ce15e8444de4df123265b3f490f7e2f8346631122cb5b709"
+  },
+  "2027.json": {
+    "year": 2027,
+    "entries": 34,
+    "sha256": "1dec7120abb4c328cc88bf596ac5ef448b5d674c1840fa244b2da4a303c1bb9d"
+  }
+}

@@ -15,3 +15,18 @@ ui-test-profile/
 .vs/
 bin/
 obj/
+
+# Local OS, editor and Python files
+.DS_Store
+**/.DS_Store
+*.user
+*.suo
+__pycache__/
+*.py[cod]
+
+# Private salary profiles and native UI test output
+**/settings.json*
+**/calendars/
+ui-preview/
+ui-regression/
+.tools/
